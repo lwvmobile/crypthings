@@ -43,6 +43,7 @@ int main ()
   uint16_t len = 0;
   uint16_t type = 256;  //AES256
   uint16_t nblocks = 1; //number of rounds needed
+  int16_t  offset = 16;  //an offset value to keystream application, if required (account for OFB discard round)
   int16_t  confirm = 0;
 
   fprintf (stderr, "\n----------------Tinier-AES OFB Message Cipher----------------");
@@ -136,8 +137,12 @@ int main ()
     return 0;
   }
 
+  fprintf (stderr, "\n Enter Keystream Application Offset (#Bytes, 0 and 16 are typical): ");
+  scanf("%hi", &offset);
+  fprintf (stderr, " Keystream Offset: %d", offset);
+
   memset (input_string, 0, 2048*sizeof(char));
-  fprintf (stderr, "\n Enter Input Message (Hex Octets): ");
+  fprintf (stderr, "\n\n Enter Input Message (Hex Octets): ");
   scanf("%s", input_string); //no white space allowed
   input_string[2999] = '\0'; //terminate string
   len = parse_raw_user_string(input_string, input_bytes);
@@ -145,7 +150,15 @@ int main ()
   //calculate nblocks needed based on returned len value here
   nblocks = len / 16;
   if (len % 16) nblocks += 1;
-  nblocks++; //add one more for the OFB discard round
+  
+  //additional to account for keystream offset
+  int16_t t = offset;
+  while (t)
+  {
+    t /= 16;
+    nblocks++;
+  }
+  if (offset % 16) nblocks++;
 
   //print input
   fprintf (stderr, "\n  Input: ");
@@ -155,13 +168,13 @@ int main ()
   //byte-wise output of AES OFB Keystream
   aes_ofb_keystream_output(iv, key, keystream_bytes, type, nblocks);
 
-  //xor keystream vs input to get output (+16 for discard round on keystream)
-  for (i = 0; i < 16*(nblocks-1); i++)
-    output_bytes[i] = input_bytes[i] ^ keystream_bytes[i+16];
+  //xor keystream vs input to get output
+  for (i = 0; i < len; i++)
+    output_bytes[i] = input_bytes[i] ^ keystream_bytes[i+offset];
 
   //print output
   fprintf (stderr, "\n\n Output: ");
-  for (i = 0; i < 16*(nblocks-1); i++)
+  for (i = 0; i < len; i++)
   {
     if ((i != 0) && ((i%8) == 0))
       fprintf (stderr, " ");

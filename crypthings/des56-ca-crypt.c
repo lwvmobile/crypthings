@@ -94,7 +94,7 @@ int main ()
   else
   {
     offset = 11; //known good offset for this value
-    fprintf (stderr, " Forward Increment %03d; Configured for FDMA Voice Application with KS Offset: %d; ", ffwrd, offset);
+    fprintf (stderr, " Forward Increment %03d;\n Configured for FDMA Voice Application with KS Offset: %d; ", ffwrd, offset);
   }
 
   memset (input_string, 0, 2048*sizeof(char));
@@ -106,7 +106,15 @@ int main ()
   //calculate the number of blocks/rounds required
   nblocks = len / 8;
   if (len % 8) nblocks += 1; //additional if not an even multiple of 8
-  nblocks+=2; //no discard round executed with this CA setup, but this is required for the +11 offset
+
+  //additional to account for keystream offset
+  int16_t t = offset;
+  while (t)
+  {
+    t /= 8;
+    nblocks++;
+  }
+  if (offset % 8) nblocks++;
 
   //DES56-CA is a bit-wise operation on the des_cipher, and runs by bit number required
   nbits = nblocks * 64;

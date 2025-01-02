@@ -74,6 +74,10 @@ int main ()
   for (i = 0; i < len; i++)
     fprintf (stderr, "%02X", iv[i]);
 
+  fprintf (stderr, "\n Enter Keystream Application Offset (#Bytes, 0, 8, or 19 are typical): ");
+  scanf("%hi", &offset);
+  fprintf (stderr, " Keystream Offset: %d", offset);
+
   memset (input_string, 0, 2048*sizeof(char));
   fprintf (stderr, "\n Enter Input Message (Hex Octets): ");
   scanf("%s", input_string); //no white space allowed
@@ -83,7 +87,15 @@ int main ()
   //calculate the number of blocks/rounds required
   nblocks = len / 8;
   if (len % 8) nblocks += 1; //additional if not an even multiple of 8
-  nblocks++; //additional to account for OFB discard round
+
+  //additional to account for keystream offset
+  int16_t t = offset;
+  while (t)
+  {
+    t /= 8;
+    nblocks++;
+  }
+  if (offset % 8) nblocks++;
 
   //print input
   fprintf (stderr, "\n  Input: ");
@@ -97,12 +109,12 @@ int main ()
   // tdea_tofb_keystream_output (key, key, key, iv, keystream_bytes, de, nblocks);
 
   //xor keystream vs input to get output
-  for (i = 0; i < ((nblocks-1)*8); i++)
+  for (i = 0; i < len; i++)
     output_bytes[i] = input_bytes[i] ^ keystream_bytes[i+offset];
 
   //print output
   fprintf (stderr, "\n\n Output: ");
-  for (i = 0; i < ((nblocks-1)*8); i++)
+  for (i = 0; i < len; i++)
   {
     if ((i != 0) && ((i%8) == 0))
       fprintf (stderr, " ");

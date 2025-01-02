@@ -67,10 +67,10 @@ int main ()
   //sanity check on kivlen, should not exceed 13 (could be other implementation of the cipher that have a larger value, may need to expand kiv storage)
   if (kivlen > 13) kivlen = 13;
 
-  fprintf (stderr, " Enter RC4 Dropbyte Value (256 and 267 are typical):  ");
+  fprintf (stderr, " Enter RC4 Dropbyte Value (#Bytes, 256 and 267 are typical):  ");
   scanf("%hi", &drop);
 
-  fprintf (stderr, " Enter Keystream Application Offset (0 is default):  ");
+  fprintf (stderr, " Enter Keystream Application Offset (#Bytes, 0 is default):  ");
   scanf("%hi", &offset);
 
   //in the RC4 cipher, you can just add the offset to the drop value to get a starting position for keystream output
