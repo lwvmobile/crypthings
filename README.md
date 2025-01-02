@@ -13,7 +13,7 @@ Windows users, precompiled exe files will be available under releases.
 ## Information and Resources, Test Vectors, Etc.
 
 NIST Cryptographic Standards and Guidelines
-[FIPS 81](https://csrc.nist.gov/projects/cryptographic-standards-and-guidelines/ "FIPS 81")
+[NIST Guidelines](https://csrc.nist.gov/projects/cryptographic-standards-and-guidelines/ "NIST Guidelines")
 
 FIPS Publication 81 DES Modes of Operation
 [FIPS 81](https://nvlpubs.nist.gov/nistpubs/Legacy/FIPS/fipspub81.pdf "FIPS 81")
