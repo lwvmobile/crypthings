@@ -134,6 +134,8 @@ int main ()
   else
   {
     fprintf (stderr, "\n Abnormal IV len %d octets; Please enter 32-bit(8 hex char/4 octets),\n 64-bit (16 hex char/8 octets), or 128-bit (32 hex char/16 octet) IV; ", len);
+    fprintf (stderr, "\n\n Enter any value to Exit: ");
+    scanf("%hi", &confirm);
     return 0;
   }
 

@@ -29,8 +29,8 @@ int main ()
   uint8_t iv[8];
   memset (iv, 0, 8*sizeof(uint8_t));
 
-  uint8_t kiv[13];
-  memset (kiv, 0, 13*sizeof(uint8_t));
+  uint8_t kiv[100];
+  memset (kiv, 0, 100*sizeof(uint8_t));
 
   uint8_t input_bytes[129*18];
   memset (input_bytes, 0, 129*18*sizeof(uint8_t));
@@ -59,13 +59,17 @@ int main ()
   //echo input and calculate the kivlen
   if ((kivlen % 8) != 0)
   {
-    fprintf (stderr, "\n Abnormal IV len %d bits; Please Enter IV Len multiple of 8 bits!", kivlen);
-    return 0;
+    fprintf (stderr, " Abnormal IV len %d bits!", kivlen);
+    kivlen = 64;
+    fprintf (stderr, "\n Defaulting to %d bit value.\n", kivlen);
   }
-  else kivlen = (kivlen / 8) + 5;
+  
+  //convert to byte count with key's 5 bytes
+  kivlen = (kivlen / 8) + 5;
 
-  //sanity check on kivlen, should not exceed 13 (could be other implementation of the cipher that have a larger value, may need to expand kiv storage)
-  if (kivlen > 13) kivlen = 13;
+  //sanity check on kivlen, most applications will most likely be 9, or 13 (32 or 64 bit IV)
+  //but this has been expanded to allow a longer KIV value of up to 94 (probably overkill)
+  if (kivlen > 94) kivlen = 94;
 
   fprintf (stderr, " Enter RC4 Dropbyte Value (#Bytes, 256 and 267 are typical):  ");
   scanf("%hi", &drop);
@@ -80,7 +84,7 @@ int main ()
   fprintf (stderr, "\n");
 
   memset (input_string, 0, 2048*sizeof(char));
-  fprintf (stderr, " Enter Key (10 octets): ");
+  fprintf (stderr, " Enter Key (5 octets): ");
   scanf("%s", input_string); //no white space allowed
   input_string[2999] = '\0'; //terminate string
   len = parse_raw_user_string(input_string, key);
@@ -88,10 +92,10 @@ int main ()
   //print key
   fprintf (stderr, " Key: ");
   for (i = 0; i < len; i++)
-      fprintf (stderr, "%02X", key[i]);
+    fprintf (stderr, "%02X", key[i]);
 
   memset (input_string, 0, 2048*sizeof(char));
-  fprintf (stderr, "\n Enter IV (4 or 8 octets): ");
+  fprintf (stderr, "\n Enter IV (4 or 8 octets are typical): ");
   scanf("%s", input_string); //no white space allowed
   input_string[2999] = '\0'; //terminate string
   len = parse_raw_user_string(input_string, iv);
@@ -99,7 +103,7 @@ int main ()
   //print key
   fprintf (stderr, " IV: ");
   for (i = 0; i < len; i++)
-      fprintf (stderr, "%02X", iv[i]);
+    fprintf (stderr, "%02X", iv[i]);
 
   //pack key and IV into kiv
   for (i = 0; i < 5; i++)
@@ -112,7 +116,7 @@ int main ()
   fprintf (stderr, "\n");
   fprintf (stderr, " KIV: ");
   for (i = 0; i < kivlen; i++)
-      fprintf (stderr, "%02X", kiv[i]);
+    fprintf (stderr, "%02X", kiv[i]);
 
   memset (input_string, 0, 2048*sizeof(char));
   fprintf (stderr, "\n Enter Input Message (Hex Octets): ");
