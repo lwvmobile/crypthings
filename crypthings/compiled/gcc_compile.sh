@@ -9,3 +9,5 @@ gcc ../scrambler-crypt.c ../../ciphers/scrambler/scrambler.c ../../utils/utils.c
 gcc ../aes-key-unwrap.c ../../ciphers/aes/aes.c ../../utils/utils.c -o aes-key-unwrap.o -Wall -Wextra -Wpedantic
 gcc ../aes-key-wrap.c ../../ciphers/aes/aes.c ../../utils/utils.c -o aes-key-wrap.o -Wall -Wextra -Wpedantic
 gcc ../straight-crypt.c ../../utils/utils.c -o straight-crypt.o -Wall -Wextra -Wpedantic
+gcc ../lfsr_recovery_tool.c ../../utils/utils.c -o lfsr_recovery_tool.o -Wall -Wextra -Wpedantic
+gcc ../lfsr_expansion_tool.c ../../utils/utils.c -o lfsr_expansion_tool.o -Wall -Wextra -Wpedantic

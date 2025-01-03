@@ -9,3 +9,5 @@
 /usr/bin/x86_64-w64-mingw32-gcc ../aes-key-unwrap.c ../../ciphers/aes/aes.c ../../utils/utils.c -o aes-key-unwrap.exe
 /usr/bin/x86_64-w64-mingw32-gcc ../aes-key-wrap.c ../../ciphers/aes/aes.c ../../utils/utils.c -o aes-key-wrap.exe
 /usr/bin/x86_64-w64-mingw32-gcc ../straight-crypt.c ../../utils/utils.c -o straight-crypt.exe
+/usr/bin/x86_64-w64-mingw32-gcc ../lfsr_recovery_tool.c ../../utils/utils.c -o lfsr_recovery_tool.exe
+/usr/bin/x86_64-w64-mingw32-gcc ../lfsr_expansion_tool.c ../../utils/utils.c -o lfsr_expansion_tool.exe

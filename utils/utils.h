@@ -36,6 +36,9 @@ void lfsr_64_to_128(uint8_t * iv);
 uint64_t lfsr_64_to_len(uint8_t * iv, int16_t len);
 uint64_t reverse_lfsr_64_to_len(uint8_t * iv, int16_t len);
 
+uint64_t lfsr_32d_to_len(uint8_t * iv, int16_t len);
+uint64_t reverse_lfsr_32d_to_len(uint8_t * iv, int16_t len);
+
 #ifdef __cplusplus
 }
 #endif

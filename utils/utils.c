@@ -237,7 +237,7 @@ void lfsr_32_to_64(uint8_t * iv)
   }
 
   fprintf (stderr, "\n IV(64): ");
-  for (x = 0; x < 16; x++)
+  for (x = 0; x < 8; x++)
     fprintf (stderr, "%02X", iv[x]);
   fprintf (stderr, "\n");
 
@@ -322,9 +322,9 @@ uint64_t lfsr_64_to_len(uint8_t * iv, int16_t len)
   for (int16_t i = 0; i < 8; i++)
     iv[i] = (lfsr >> (56-(i*8))) & 0xFF;
 
-  // fprintf (stderr, "\n IV(%02d): ", len);
-  // for (int16_t i = 0; i < 8; i++)
-  //   fprintf (stderr, "%02X", iv[i]);
+  fprintf (stderr, " LFSR(%02d): ", len);
+  for (int16_t i = 0; i < 8; i++)
+    fprintf (stderr, "%02X", iv[i]);
 
   return bit;
 
@@ -359,9 +359,71 @@ uint64_t reverse_lfsr_64_to_len(uint8_t * iv, int16_t len)
   for (int16_t i = 0; i < 8; i++)
     iv[i] = (lfsr >> (56-(i*8))) & 0xFF;
 
-  // fprintf (stderr, "\n RV(%02d): ", len);
-  // for (int16_t i = 0; i < 8; i++)
-  //   fprintf (stderr, "%02X", iv[i]);
+  fprintf (stderr, " RV LFSR(%02d): ", len);
+  for (int16_t i = 0; i < 8; i++)
+    fprintf (stderr, "%02X", iv[i]);
+
+  return bit2;
+
+}
+
+uint64_t lfsr_32d_to_len(uint8_t * iv, int16_t len)
+{
+
+  uint64_t lfsr = 0, bit = 0;
+
+  lfsr = ((uint64_t)iv[0] << 24ULL) + ((uint64_t)iv[1] << 16ULL) + ((uint64_t)iv[2] << 8ULL)  + ((uint64_t)iv[3] << 0ULL);
+
+  memset (iv, 0, 8*sizeof(uint8_t));
+
+  for(int16_t cnt = 0; cnt < len; cnt++)
+  {
+    //magical taps that somebody must have dreamt up
+    bit = ((lfsr >> 31) ^ (lfsr >> 3) ^ (lfsr >> 1)) & 0x1;
+    lfsr = (lfsr << 1) | bit;
+  }
+
+  for (int16_t i = 0; i < 4; i++)
+    iv[i] = (lfsr >> (24-(i*8))) & 0xFF;
+
+  fprintf (stderr, " LFSR32D(%02d): ", len);
+  for (int16_t i = 0; i < 4; i++)
+    fprintf (stderr, "%02X", iv[i]);
+
+  return bit;
+
+}
+
+uint64_t reverse_lfsr_32d_to_len(uint8_t * iv, int16_t len)
+{
+
+  uint64_t lfsr = 0, bit1 = 0, bit2 = 0;
+
+  lfsr = ((uint64_t)iv[0] << 24ULL) + ((uint64_t)iv[1] << 16ULL) + ((uint64_t)iv[2] << 8ULL)  + ((uint64_t)iv[3] << 0ULL);
+
+  memset (iv, 0, 8*sizeof(uint8_t));
+
+  for(int16_t cnt = 0; cnt < len; cnt++)
+  {
+    //magical taps that somebody must have dreamt up
+
+    //taps at the +1 position on all but MSB, then check the LSB and configure bit as required
+    bit1 = ((lfsr >> 4) ^ (lfsr >> 2)) & 0x1;
+    bit2 = lfsr & 1;
+    if (bit1 == bit2)
+      bit2 = 0;
+    else bit2 = 1;
+
+    //just run this in reverse of normal LFSR
+    lfsr = (lfsr >> 1) | (bit2 << 31);
+  }
+
+  for (int16_t i = 0; i < 4; i++)
+    iv[i] = (lfsr >> (24-(i*8))) & 0xFF;
+
+  fprintf (stderr, " RV LFSR32D(%02d): ", len);
+  for (int16_t i = 0; i < 4; i++)
+    fprintf (stderr, "%02X", iv[i]);
 
   return bit2;
 
