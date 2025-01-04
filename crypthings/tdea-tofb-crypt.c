@@ -135,6 +135,9 @@ int main ()
   //byte-wise output of TDEA-TOFB Keystream
   tdea_tofb_keystream_output (K1, K2, K3, iv, keystream_bytes, de, nblocks);
 
+  //test TDEA ECB Mode
+  // tdea_ecb_payload_crypt(K1, K2, K3, input_bytes, output_bytes, de);
+
   //xor keystream vs input to get output
   for (i = 0; i < len; i++)
     output_bytes[i] = input_bytes[i] ^ keystream_bytes[i+offset];

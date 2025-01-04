@@ -378,6 +378,41 @@ void des56_ecb_payload_crypt (uint8_t * main_key, uint8_t * input_register, uint
   des_cipher(main_key, input_register, output_register, de);
 }
 
+//TDEA, or triple data encryption algorithm, or triple DES, in electronic codebook mode
+void tdea_ecb_payload_crypt (uint8_t * K1, uint8_t * K2, uint8_t * K3, uint8_t * input, uint8_t * output, uint8_t de)
+{
+
+  //cipher input and output
+  uint8_t input_register[8];  memset(input_register, 0, sizeof(input_register));
+  uint8_t output_register[8]; memset(output_register, 0, sizeof(output_register));
+
+  //copy the input to the input_register (make copy so we don't manipulate the calling functions copy)
+  memcpy(input_register, input, sizeof(input_register));
+
+  //For TDEA, the cipher alternates between encryption and decryption to the payload
+  //so, for example, K1 is run as de=1, K2 is run as de=0, and K3 is run as de=1,
+  //K1 and K3 will always use the same mode and K2 will be the opposite
+  
+  //K1
+  des_cipher(K1, input_register, output_register, de);
+  memcpy(input_register, output_register, sizeof(output_register)); //recycle output_register back into input_register
+  memset(output_register, 0, sizeof(output_register)); //reset output register
+
+  //K2
+  de = (de ^ 1) & 1; //flip the de bit
+  des_cipher(K2, input_register, output_register, de);
+  memcpy(input_register, output_register, sizeof(output_register)); //recycle output_register back into input_register
+  memset(output_register, 0, sizeof(output_register)); //reset output register
+
+  //K3
+  de = (de ^ 1) & 1; //flip the de bit back
+  des_cipher(K3, input_register, output_register, de);
+
+  //copy payload out
+  memcpy(output, output_register, sizeof(output_register)); //copy output_register to output
+
+}
+
 //TDEA, or triple data encryption algorithm, or triple DES, in output feedback mode
 void tdea_tofb_keystream_output (uint8_t * K1, uint8_t * K2, uint8_t * K3, uint8_t * iv, uint8_t * ks_bytes, uint8_t de, int16_t nblocks)
 {
@@ -392,17 +427,6 @@ void tdea_tofb_keystream_output (uint8_t * K1, uint8_t * K2, uint8_t * K3, uint8
   //execute the des_cipher in output feedback mode 3 times using each key and transferring output to input each time
   for (int16_t i = 0; i < nblocks; i++)
   {
-
-    //Output = EK3(DK2(EK1(Input)))
-
-    //For TDEA, the cipher alternates between encryption and decryption inside each nblock for loop,
-    //so, for example, K1 is run as de=1, K2 is run as de=0, and K3 is run as de=1,
-    //K1 and K3 will always use the same mode (encrypt or decrypt) and always start the same way each nblock needed
-
-    //NIST documents suggests this can also be run in the opposite order if needed, so
-    //the de variable is passed from the calling function to specify the order this is run.
-    //this most likely will only be relevant if running a TDEA ECB, CTR, or CBC mode.
-    
     //K1
     des_cipher(K1, input_register, output_register, de);
     memcpy(input_register, output_register, sizeof(output_register)); //recycle output_register back into input_register
