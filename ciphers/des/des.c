@@ -392,6 +392,9 @@ void tdea_ecb_payload_crypt (uint8_t * K1, uint8_t * K2, uint8_t * K3, uint8_t *
   //For TDEA, the cipher alternates between encryption and decryption to the payload
   //so, for example, K1 is run as de=1, K2 is run as de=0, and K3 is run as de=1,
   //K1 and K3 will always use the same mode and K2 will be the opposite
+
+  //NOTE: If running ECB mode in decryption, make sure to send the keys in reverse order
+  //so that its K3, K2, and K1 for decryption, and K1, K2, K3 for encryption
   
   //K1
   des_cipher(K1, input_register, output_register, de);

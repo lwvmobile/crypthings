@@ -8,6 +8,8 @@
 /usr/bin/x86_64-w64-mingw32-gcc ../scrambler-crypt.c ../../ciphers/scrambler/scrambler.c ../../utils/utils.c -o scrambler-crypt.exe
 /usr/bin/x86_64-w64-mingw32-gcc ../aes-key-unwrap.c ../../ciphers/aes/aes.c ../../utils/utils.c -o aes-key-unwrap.exe
 /usr/bin/x86_64-w64-mingw32-gcc ../aes-key-wrap.c ../../ciphers/aes/aes.c ../../utils/utils.c -o aes-key-wrap.exe
+/usr/bin/x86_64-w64-mingw32-gcc ../tdea-key-wrap.c ../../ciphers/des/des.c ../../utils/utils.c -o tdea-key-wrap.exe
+/usr/bin/x86_64-w64-mingw32-gcc ../tdea-key-unwrap.c ../../ciphers/des/des.c ../../utils/utils.c -o tdea-key-unwrap.exe
 /usr/bin/x86_64-w64-mingw32-gcc ../straight-crypt.c ../../utils/utils.c -o straight-crypt.exe
 /usr/bin/x86_64-w64-mingw32-gcc ../lfsr_recovery_tool.c ../../utils/utils.c -o lfsr_recovery_tool.exe
 /usr/bin/x86_64-w64-mingw32-gcc ../lfsr_expansion_tool.c ../../utils/utils.c -o lfsr_expansion_tool.exe
