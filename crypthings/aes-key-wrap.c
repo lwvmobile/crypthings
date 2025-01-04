@@ -5,32 +5,15 @@
  * SEE: https://nvlpubs.nist.gov/nistpubs/SpecialPublications/NIST.SP.800-38F.pdf
  * SEE: Figure 1 and Figure 2 for illustative graphic
  *
+ * NOTE: This Program only wraps/unwraps standard AES key lens
+ * Vectors: https://csrc.nist.gov/CSRC/media/Projects/Cryptographic-Standards-and-Guidelines/documents/examples/key-wrapping-KW-KWP.pdf
+ *
  * buid with gcc aes-key-wrap.c ../ciphers/aes/aes.c ../utils/utils.c -o aes-key-wrap.o -Wall -Wextra -Wpedantic
  * run with ./aes-key-wrap.o
 
  * cross compile for windows: 
  * /usr/bin/x86_64-w64-mingw32-gcc aes-key-wrap.c ../ciphers/aes/aes.c ../utils/utils.c -o aes-key-wrap.exe
  *-----------------------------------------------------------------------------*/
-
- /*
-  Test Vectors 256:
-  Un/Wrap Key: 7777888877778888777788887777888877778888777788887777888877778888
-  Key to Wrap: 1234123412341234123412341234123412341234123412341234123412341234
-  Cipher Text: 6F22B004FA867C03BBD64BCDCF15C72A92C78AC8BFA9844D812B73EBACFE08C0CC8DF7BB5E7E8CC2
-
-  Test Vectors 192:
-  Un/Wrap Key: 777788887777888877778888777788887777888877778888
-  Key to Wrap: 123412341234123412341234123412341234123412341234
-  Cipher Text: E5AEA3BF9DDF7DF02D8F8FC3DA582B0BDDDB97EDAC00D64F965266F70584133E
-
-  Test Vectors 128:
-  Un/Wrap Key: 77778888777788887777888877778888
-  Key to Wrap: 12341234123412341234123412341234
-  Cipher Text: F195F217BA9D49105E7E8B684842B82C05CE529925224172
-
-  More Vectors: https://csrc.nist.gov/CSRC/media/Projects/Cryptographic-Standards-and-Guidelines/documents/examples/key-wrapping-KW-KWP.pdf
-  NOTE: This Program only wraps/unwraps like to like AES key lens, so 128 to 128, 192 to 192, and 256 to 256
- */
 
 #include <string.h>
 #include <stdint.h>
@@ -71,41 +54,51 @@ int main ()
   fprintf (stderr, "\n------------AES Key Wrap Algorithm------------------------------");
   fprintf (stderr, "\n");
 
-  fprintf (stderr, " Enter AES Key Len / Type (128/192/256): ");
+  fprintf (stderr, " Enter AES Key to Wrap Len / Type (128/192/256): ");
   scanf("%hu", &type);
 
-  //echo input and internally change AES type to work in the internal function
+  //internally change key wrap i, j, and o bounds
   if (type == 128)
   {
-    // fprintf (stderr, " AES 128 ");
-    type = 0;
     istop = 3;
     jstop = 6;
     ostop = 24;
   }
   else if (type == 192)
   {
-    // fprintf (stderr, " AES 192 ");
-    type = 1;
     istop = 4;
     jstop = 6;
     ostop = 32;
   }
   else if (type == 256)
   {
-    // fprintf (stderr, " AES 256 ");
-    type = 2;
     istop = 5;
     jstop = 6;
     ostop = 40;
   }
   else
   {
-    fprintf (stderr, " %d Not Recognized, defaulting to AES 256 \n", type);
-    type = 2;
+    fprintf (stderr, " %d Not Recognized, defaulting Key to Wrap Len to AES 256 \n", type);
     istop = 5;
     jstop = 6;
     ostop = 40;
+  }
+
+  //prompt for the len of the Key to be Wrapped or Unwrapped
+  fprintf (stderr, " Enter AES Un/Wrap Key Len / Type (128/192/256): ");
+  scanf("%hu", &type);
+
+  //internally change AES type
+  if (type == 128)
+    type = 0;
+  else if (type == 192)
+    type = 1;
+  else if (type == 256)
+    type = 2;
+  else
+  {
+    fprintf (stderr, " %d Not Recognized, defaulting Un/Wrap Key Len to AES 256 \n", type);
+    type = 2;
   }
 
   memset (input_string, 0, 2048*sizeof(char));
@@ -138,8 +131,7 @@ int main ()
   //   for (i = 0; i < 8; i++)
   //     fprintf (stderr, "%02X", C[j][i]);
   // }
-
-  fprintf (stderr, "\n");
+  // fprintf (stderr, "\n");
 
   //A = C0 (IV) first 8 octets only
   uint8_t A[8];
