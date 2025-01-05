@@ -509,6 +509,56 @@ void tdea_cbc_payload_crypt (uint8_t * K1, uint8_t * K2, uint8_t * K3, uint8_t *
 
 }
 
+//TDEA, or triple data encryption algorithm, or triple DES, in cihper feedback mode (64-bit)
+//same as usual inputs (byte wise), also, if needing DES56, just feed the same key into K1, K2, and K3
+void tdea_cfb_payload_crypt (uint8_t * K1, uint8_t * K2, uint8_t * K3, uint8_t * iv, uint8_t * in, uint8_t * out, int16_t nblocks, uint8_t de)
+{
+
+  int16_t i, j;
+
+  //cipher input and output
+  uint8_t input_register[8];  memset(input_register, 0, sizeof(input_register));
+  uint8_t output_register[8]; memset(output_register, 0, sizeof(output_register));
+
+  //copy the IV to the input_register (make copy so we don't manipulate the calling functions copy)
+  memcpy(input_register, iv, sizeof(input_register));
+
+  //execute the des_cipher in output feedback mode 3 times using each key and transferring output to input each time
+  for (i = 0; i < nblocks; i++)
+  {
+    
+    //the cipher is always run in the foward, or encryption mode (1,0,1)
+
+    //K1
+    des_cipher(K1, input_register, output_register, 1);
+    memcpy(input_register, output_register, sizeof(output_register)); //recycle output_register back into input_register
+    memset(output_register, 0, sizeof(output_register)); //reset output register
+
+    //K2
+    des_cipher(K2, input_register, output_register, 0);
+    memcpy(input_register, output_register, sizeof(output_register)); //recycle output_register back into input_register
+    memset(output_register, 0, sizeof(output_register)); //reset output register
+
+    //K3
+    des_cipher(K3, input_register, output_register, 1);
+
+    //xor the current input 'in' to the current state of the input_register for cipher feedback
+    for (j = 0; j < 8; j++)
+      output_register[j] ^= in[j+(i*8)];
+
+    memcpy(input_register, output_register, sizeof(output_register)); //recycle output_register back into input_register
+
+    //copy keystream out and reset
+    memcpy(out+(i*8), output_register, sizeof(output_register)); //copy output_register to ks_bytes + iteration offset of times 8
+    memset(output_register, 0, sizeof(output_register)); //reset output register
+
+    //if running in decryption mode, we feed in the next round of input
+    if (!de)
+      memcpy(input_register, in+(i*8), sizeof(input_register));
+  }
+
+}
+
 //TDEA, or triple data encryption algorithm, or triple DES, in output feedback mode
 void tdea_tofb_keystream_output (uint8_t * K1, uint8_t * K2, uint8_t * K3, uint8_t * iv, uint8_t * ks_bytes, uint8_t de, int16_t nblocks)
 {
