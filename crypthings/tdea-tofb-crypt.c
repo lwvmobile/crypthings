@@ -138,6 +138,9 @@ int main ()
   //test TDEA ECB Mode
   // tdea_ecb_payload_crypt(K1, K2, K3, input_bytes, output_bytes, de);
 
+  //Test TDEA MAC Generator (working, disable xor below)
+  // tdea_cbc_mac_generator(K1, K2, K3, input_bytes, output_bytes, nblocks);
+
   //xor keystream vs input to get output
   for (i = 0; i < len; i++)
     output_bytes[i] = input_bytes[i] ^ keystream_bytes[i+offset];

@@ -108,6 +108,11 @@ int main ()
   //TDEA test using K1=K2=K3 backwards compatibility for DES56
   // tdea_tofb_keystream_output (key, key, key, iv, keystream_bytes, de, nblocks);
 
+  //CBC, and CFB Tests (disable xor below)
+  // de = 0;
+  // tdea_cbc_payload_crypt(key, key, key, iv, input_bytes, output_bytes, nblocks, de);
+  // tdea_cfb_payload_crypt(key, key, key, iv, input_bytes, output_bytes, nblocks, de);
+
   //xor keystream vs input to get output
   for (i = 0; i < len; i++)
     output_bytes[i] = input_bytes[i] ^ keystream_bytes[i+offset];
