@@ -607,6 +607,88 @@ void tdea_cfb_payload_crypt (uint8_t * K1, uint8_t * K2, uint8_t * K3, uint8_t *
 
 }
 
+//TDEA, or triple data encryption algorithm, or triple DES, in IV counter mode (untested)
+void tdea_ctr_payload_crypt (uint8_t * K1, uint8_t * K2, uint8_t * K3, uint8_t * iv, uint8_t * input, uint8_t * output, int16_t nblocks)
+{
+
+  int16_t i, j;
+
+  //cipher input and output
+  uint8_t input_register[8];  memset(input_register, 0, sizeof(input_register));
+  uint8_t output_register[8]; memset(output_register, 0, sizeof(output_register));
+
+  //copy the IV to the input_register (ctr mode will manipulate the IV, since it needs to keep a rolling counter
+  memcpy(input_register, iv, sizeof(input_register));
+
+  //execute the des_cipher in counter mode 3 times using each key and transferring output to input each time
+  //then the IV is iterated and fed back into the input_register to start the next nblocks loop
+  for (i = 0; i < nblocks; i++)
+  {
+
+    //CTR mode cipher should always run in the forward (encryption) mode
+
+    //K1
+    des_cipher(K1, input_register, output_register, 1);
+    memcpy(input_register, output_register, sizeof(output_register)); //recycle output_register back into input_register
+    memset(output_register, 0, sizeof(output_register)); //reset output register
+
+    //K2
+    des_cipher(K2, input_register, output_register, 0);
+    memcpy(input_register, output_register, sizeof(output_register)); //recycle output_register back into input_register
+    memset(output_register, 0, sizeof(output_register)); //reset output register
+
+    //K3
+    des_cipher(K3, input_register, output_register, 1);
+
+    //set output at current pointer to the xor of input current pointer and the output_register
+    for (j = 0; j < 8; j++)
+      output[j+(i*8)] = input[j+(i*8)] ^ output_register[j];
+
+    memset(output_register, 0, sizeof(output_register)); //reset output register
+
+    //increment the IV, and handle roll over (uint8_t will rollover to 0 after 0xFF)
+    iv[7]++;
+    if (iv[7] == 0)
+    {
+      iv[6]++;
+      if (iv[6] == 0)
+      {
+        iv[5]++;
+        if (iv[5] == 0)
+        {
+          iv[4]++;
+          if (iv[4] == 0)
+          {
+            iv[3]++;
+            if (iv[3] == 0)
+            {
+              iv[2]++;
+              if (iv[2] == 0)
+              {
+                iv[1]++;
+                if (iv[1] == 0)
+                {
+                  iv[0]++;
+                }
+              }
+            }
+          }
+        }
+      }
+    }
+
+    //debug IV iteration
+    // fprintf (stderr, "\n IV: ");
+    // for (j = 0; j < 8; j++)
+    //   fprintf (stderr, "%02X", iv[j]);
+
+    //feed the new IV into the input register
+    memcpy (input_register, iv, sizeof(input_register));
+    
+  }
+
+}
+
 //TDEA, or triple data encryption algorithm, or triple DES, in output feedback mode
 void tdea_tofb_keystream_output (uint8_t * K1, uint8_t * K2, uint8_t * K3, uint8_t * iv, uint8_t * ks_bytes, uint8_t de, int16_t nblocks)
 {
