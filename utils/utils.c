@@ -107,6 +107,14 @@ void pack_bit_array_into_byte_array_asym (uint8_t * input, uint8_t * output, int
     output[i/8] <<= 8-k;
 }
 
+//pack up to 64-bit variable into a bit array up to specified len and shift value
+void pack_value_into_bit_array (uint64_t input, uint8_t * output, uint64_t len, uint64_t shift)
+{
+  uint64_t i;
+  for (i = 0; i < len; i++)
+    output[i] = (input >> (shift-i)) & 1;
+}
+
 void xor_bytes(uint8_t * input, uint8_t * output, int16_t start, int16_t end)
 {
   for (int16_t i = start; i < end; i++)

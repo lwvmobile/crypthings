@@ -15,6 +15,7 @@ uint64_t convert_bytes_into_value(uint8_t * input, int len);
 void unpack_byte_array_into_bit_array (uint8_t * input, uint8_t * output, int len);
 void pack_bit_array_into_byte_array (uint8_t * input, uint8_t * output, int len);
 void pack_bit_array_into_byte_array_asym (uint8_t * input, uint8_t * output, int len);
+void pack_value_into_bit_array (uint64_t input, uint8_t * output, uint64_t len, uint64_t shift);
 
 void xor_bytes(uint8_t * input, uint8_t * output, int16_t start, int16_t end);
 void inv_bytes(uint8_t * input, int16_t start, int16_t end);
