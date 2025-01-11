@@ -5,7 +5,7 @@
  * SEE: https://nvlpubs.nist.gov/nistpubs/SpecialPublications/NIST.SP.800-38F.pdf
  * SEE: Figure 1 and Figure 2 for illustative graphic
  *
- * NOTE: This Program only wraps/unwraps standard AES key lens
+ * NOTE: This Program only wraps/unwraps single 64, 128, 192, or 256 bit keys
  * Vectors: https://csrc.nist.gov/CSRC/media/Projects/Cryptographic-Standards-and-Guidelines/documents/examples/key-wrapping-KW-KWP.pdf
  *
  * buid with gcc aes-key-wrap.c ../ciphers/aes/aes.c ../utils/utils.c -o aes-key-wrap.o -Wall -Wextra -Wpedantic
@@ -54,11 +54,17 @@ int main ()
   fprintf (stderr, "\n------------AES Key Wrap Algorithm------------------------------");
   fprintf (stderr, "\n");
 
-  fprintf (stderr, " Enter AES Key to Wrap Len / Type (128/192/256): ");
+  fprintf (stderr, " Enter Key to Wrap Len / Type  (64/128/192/256): ");
   scanf("%hu", &type);
 
   //internally change key wrap i, j, and o bounds
-  if (type == 128)
+  if (type == 64)
+  {
+    istop = 2;
+    jstop = 6;
+    ostop = 16;
+  }
+  else if (type == 128)
   {
     istop = 3;
     jstop = 6;
