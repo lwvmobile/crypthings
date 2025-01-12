@@ -1,13 +1,13 @@
 /*-------------------------------------------------------------------------------
- * lfsr_recovery_tool.c         Crypthings
+ * lfsr-recovery-tool.c         Crypthings
  * Tool For running LFSR's of various tap values a specified number of
  * times in the forward or reverse direction
  *
- * buid with gcc lfsr_recovery_tool.c ../utils/utils.c -o lfsr_recovery_tool.o -Wall -Wextra -Wpedantic
- * run with ./lfsr_recovery_tool.o
+ * buid with gcc lfsr-recovery-tool.c ../utils/utils.c -o lfsr-recovery-tool.o -Wall -Wextra -Wpedantic
+ * run with ./lfsr-recovery-tool.o
  * 
  * cross compile for windows: 
- * /usr/bin/x86_64-w64-mingw32-gcc lfsr_recovery_tool.c ../utils/utils.c -o lfsr_recovery_tool.exe
+ * /usr/bin/x86_64-w64-mingw32-gcc lfsr-recovery-tool.c ../utils/utils.c -o lfsr-recovery-tool.exe
  *-----------------------------------------------------------------------------*/
 
 #include <string.h>

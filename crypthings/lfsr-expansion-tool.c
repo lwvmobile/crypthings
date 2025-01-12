@@ -1,13 +1,13 @@
 /*-------------------------------------------------------------------------------
- * lfsr_expansion_tool.c         Crypthings
+ * lfsr-expansion-tool.c         Crypthings
  * Tool For running LFSR's of various tap values a specified number of
  * times in the forward direction to expand and/or iterate
  *
- * buid with gcc lfsr_expansion_tool.c ../utils/utils.c -o lfsr_expansion_tool.o -Wall -Wextra -Wpedantic
- * run with ./lfsr_expansion_tool.o
+ * buid with gcc lfsr-expansion-tool.c ../utils/utils.c -o lfsr-expansion-tool.o -Wall -Wextra -Wpedantic
+ * run with ./lfsr-expansion-tool.o
  * 
  * cross compile for windows: 
- * /usr/bin/x86_64-w64-mingw32-gcc lfsr_expansion_tool.c ../utils/utils.c -o lfsr_expansion_tool.exe
+ * /usr/bin/x86_64-w64-mingw32-gcc lfsr-expansion-tool.c ../utils/utils.c -o lfsr-expansion-tool.exe
  *-----------------------------------------------------------------------------*/
 
 #include <string.h>

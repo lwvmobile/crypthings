@@ -11,5 +11,5 @@
 /usr/bin/x86_64-w64-mingw32-gcc ../tdea-key-wrap.c ../../ciphers/des/des.c ../../utils/utils.c -o tdea-key-wrap.exe
 /usr/bin/x86_64-w64-mingw32-gcc ../tdea-key-unwrap.c ../../ciphers/des/des.c ../../utils/utils.c -o tdea-key-unwrap.exe
 /usr/bin/x86_64-w64-mingw32-gcc ../straight-crypt.c ../../utils/utils.c -o straight-crypt.exe
-/usr/bin/x86_64-w64-mingw32-gcc ../lfsr_recovery_tool.c ../../utils/utils.c -o lfsr_recovery_tool.exe
-/usr/bin/x86_64-w64-mingw32-gcc ../lfsr_expansion_tool.c ../../utils/utils.c -o lfsr_expansion_tool.exe
+/usr/bin/x86_64-w64-mingw32-gcc ../lfsr-recovery-tool.c ../../utils/utils.c -o lfsr-recovery-tool.exe
+/usr/bin/x86_64-w64-mingw32-gcc ../lfsr-expansion-tool.c ../../utils/utils.c -o lfsr-expansion-tool.exe
