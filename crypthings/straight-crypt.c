@@ -31,6 +31,9 @@ int main ()
   uint8_t ks_bits[129*18*8];
   memset (ks_bits, 0, sizeof(ks_bits));
 
+  uint8_t ks_bytes[129*18];
+  memset (ks_bytes, 0, sizeof(ks_bytes));
+
   uint8_t input_bytes[129*18];
   memset (input_bytes, 0, 129*18*sizeof(uint8_t));
 
@@ -79,7 +82,7 @@ int main ()
   fprintf (stderr, " Enter Number of Significant Bits in Key: ");
   scanf("%hi", &kbitlen);
 
-  fprintf (stderr, " Do you need to mask the 3rd Hex Value (0-no/1-yes): ");
+  fprintf (stderr, " Is this a 48/49-bit mode operation on 56-bit input? (0-no/1-yes): ");
   scanf("%hi", &mask);
 
   fprintf (stderr, " Apply Keystream Offset by number of bits (0-no/#bits): ");
@@ -105,7 +108,14 @@ int main ()
   //print input
   fprintf (stderr, "\n  Input: ");
   for (i = 0; i < bytelen; i++)
+  {
+    if (mask)
+    {
+      if ((i != 0) && ((i%7) == 0))
+        fprintf (stderr, " ");
+    }
     fprintf (stderr, "%02X", input_bytes[i]);
+  }
 
   //convert input_bytes to input_bits
   unpack_byte_array_into_bit_array(input_bytes, input_bits, bytelen);
@@ -119,13 +129,45 @@ int main ()
     k_idx++;
   }
 
+  //debug print the ks_bits for comparison
+  pack_bit_array_into_byte_array(ks_bits+offset, ks_bytes, bytelen);
+
+  fprintf (stderr, "\n     KS: ");
+  for (i = 0; i < bytelen; i++)
+  {
+    if (mask)
+    {
+      if ((i != 0) && ((i%7) == 0))
+        fprintf (stderr, " ");
+    }
+    fprintf (stderr, "%02X", ks_bytes[i]);
+  }
+
   //XOR bitwise keystream vs bitwise input_bits
+  k_idx = 0;
   for (i = 0; i < bitlen; i++)
   {
     if (mask == 0)
+    {
       output_bits[i] = input_bits[i] ^ ks_bits[i+offset];
-    else if ( (i != 8) && (i != 9) && (i != 10) && (i != 11))
-      output_bits[i] = input_bits[i] ^ ks_bits[i+offset];
+    }
+    else 
+    {
+      if ( ((i%56) < 48) )
+      {
+        if ( ((k_idx%48) != 8) && ((k_idx%48) != 9) && ((k_idx%48) != 10) && ((k_idx%48) != 11) )
+        {
+          output_bits[i] = input_bits[i] ^ ks_bits[k_idx+offset];
+          k_idx++;
+        }
+        else k_idx++;
+      }
+      else
+      {
+        output_bits[i] = input_bits[i];
+        // k_idx++;
+      }
+    }
   }
 
   //convert output_bits to output_bytes
@@ -134,7 +176,14 @@ int main ()
   //print output
   fprintf (stderr, "\n Output: ");
   for (i = 0; i < bytelen; i++)
+  {
+    if(mask)
+    {
+      if ((i != 0) && ((i%7) == 0))
+        fprintf (stderr, " ");
+    }
     fprintf (stderr, "%02X", output_bytes[i]);
+  }
   
   //print output (as string)
   // fprintf (stderr, "\n Output: %s", output_bytes+offset);
