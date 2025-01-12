@@ -5,10 +5,12 @@ A collection of various encryption ciphers, utilities, and tools written in C.
 `git clone https://github.com/lwvmobile/crypthings.git --recursive`
 
 Open the crypthings/compiled folder and run `sh gcc-compile.sh` to compile tools for Linux.
-Run with `./aes-ofb-crypt.o` in the terminal.
+Run with `./aes-ofb-crypt.o` in the terminal, for example.
 
 Run `sh cross-compile.sh` to cross compile on Linux platform to Windows as .exe files.
 Windows users, precompiled exe files will be available under releases.
+
+See the README.md file in the crypthings folder for more information on Crypthings programs.
 
 ## Information and Resources, Test Vectors, Etc.
 
