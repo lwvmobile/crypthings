@@ -28,6 +28,9 @@ int main ()
   uint8_t pn[129*18*8];
   memset (pn, 0, sizeof(pn));
 
+  uint8_t pn_bytes[129*18];
+  memset (pn_bytes, 0, 129*18*sizeof(uint8_t));
+
   uint8_t input_bytes[129*18];
   memset (input_bytes, 0, 129*18*sizeof(uint8_t));
 
@@ -42,10 +45,11 @@ int main ()
 
   char input_string[3000];
 
-  uint32_t len = 0;
+  uint32_t len     = 0;
   uint32_t bytelen = 0;
   uint32_t bitlen  = 0;
   uint16_t kbitlen = 0;
+  uint8_t  bits49  = 0; //is this a select 49-bit operation
   uint32_t offset  = 0; //offset value to apply keystream
   int16_t  confirm = 0; //confirm exit (or input values)
 
@@ -59,7 +63,7 @@ int main ()
   scanf("%lX", &lfsr);
 
   //print key
-  fprintf (stderr, " Key: %lX", lfsr);
+  fprintf (stderr, " Key: %lX (%ld)", lfsr, lfsr);
 
   fprintf (stderr, "\n");
   fprintf (stderr, " Enter Number of bits in Key/Seed (dec): ");
@@ -67,6 +71,9 @@ int main ()
 
   fprintf (stderr, " Apply Keystream Offset by number of bits (0-no/#bits): ");
   scanf("%u", &offset);
+
+  fprintf (stderr, " Is this a 49-bit mode operation on 56-bit input? (0-no/1-yes): ");
+  scanf("%hhu", &bits49);
 
   memset (input_string, 0, 2048*sizeof(char));
   fprintf (stderr, "\n Enter Input Message (Hex Octets): ");
@@ -81,7 +88,14 @@ int main ()
   //print input
   fprintf (stderr, "\n  Input: ");
   for (i = 0; i < bytelen; i++)
+  {
+    if (bits49)
+    {
+      if ((i != 0) && ((i%7) == 0))
+        fprintf (stderr, " ");
+    }
     fprintf (stderr, "%02X", input_bytes[i]);
+  }
 
   //convert input_bytes to input_bits
   unpack_byte_array_into_bit_array(input_bytes, input_bits, bytelen);
@@ -94,19 +108,45 @@ int main ()
   else
     ls_scrambler_sequence_generator(lfsr, pn, kbitlen, bitlen+offset);
 
+  //debug print the pn sequence for comparison
+  pack_bit_array_into_byte_array(pn+offset, pn_bytes, bytelen);
+
+  fprintf (stderr, "\n     KS: ");
+  for (i = 0; i < bytelen; i++)
+  {
+    if (bits49)
+    {
+      if ((i != 0) && ((i%7) == 0))
+        fprintf (stderr, " ");
+    }
+    fprintf (stderr, "%02X", pn_bytes[i]);
+  }
+
   //XOR bitwise keystream vs bitwise input_bits
+  uint16_t k_idx = 0;
   for (i = 0; i < bitlen; i++)
-    output_bits[i] = input_bits[i] ^ pn[i+offset];
+  {
+    if (bits49)
+    {
+      if (i%56 < 49)
+        output_bits[i] = input_bits[i] ^ pn[(k_idx++)+offset];
+    }
+    else output_bits[i] = input_bits[i] ^ pn[(k_idx++)+offset];
+    
+  }
 
   //convert output_bits to output_bytes
   pack_bit_array_into_byte_array(output_bits, output_bytes, bytelen);
 
   //print output
-  fprintf (stderr, "\n\n Output: ");
+  fprintf (stderr, "\n Output: ");
   for (i = 0; i < bytelen; i++)
   {
-    if ((i != 0) && ((i%8) == 0))
-      fprintf (stderr, " ");
+    if(bits49)
+    {
+      if ((i != 0) && ((i%7) == 0))
+        fprintf (stderr, " ");
+    }
     fprintf (stderr, "%02X", output_bytes[i]);
   }
   
