@@ -56,7 +56,7 @@ int main ()
   fprintf (stderr, "\n");
 
   memset (input_string, 0, 2048*sizeof(char));
-  fprintf (stderr, " Enter Key: ");
+  fprintf (stderr, " Enter Key (Hex): ");
   scanf("%s", input_string); //no white space allowed
   input_string[2999] = '\0'; //terminate string
   len = strlen((const char*)input_string);
@@ -64,11 +64,17 @@ int main ()
   len = parse_raw_user_string(input_string, key);
   if (shift) key[len-1] <<= 4;
 
-  //print key (will display flush with extra zero if odd char value inserted, i.e., 123 will display as 1230, this is okay!)
-  fprintf (stderr, " Key: ");
-  for (i = 0; i < len; i++)
-    fprintf (stderr, "%02X", key[i]);
-  fprintf (stderr, "\n");
+  //debug print key as it is loaded in the byte array
+  // fprintf (stderr, " Key: ");
+  // for (i = 0; i < len; i++)
+  //   fprintf (stderr, "%02X", key[i]);
+  // fprintf (stderr, "\n");
+
+  //print key value in hex
+  uint64_t key_value = 0; 
+  key_value = convert_bytes_into_value(key, len);
+  if (shift) key_value >>= 4;
+  fprintf (stderr, " Key: %lX \n", key_value);
 
   fprintf (stderr, " Enter Number of Significant Bits in Key: ");
   scanf("%hi", &kbitlen);
@@ -128,11 +134,7 @@ int main ()
   //print output
   fprintf (stderr, "\n Output: ");
   for (i = 0; i < bytelen; i++)
-  {
-    if ((i != 0) && ((i%8) == 0))
-      fprintf (stderr, " ");
     fprintf (stderr, "%02X", output_bytes[i]);
-  }
   
   //print output (as string)
   // fprintf (stderr, "\n Output: %s", output_bytes+offset);
