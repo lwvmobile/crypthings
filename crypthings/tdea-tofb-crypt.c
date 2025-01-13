@@ -135,10 +135,20 @@ int main ()
   //byte-wise output of TDEA-TOFB Keystream
   tdea_tofb_keystream_output (K1, K2, K3, iv, keystream_bytes, de, nblocks);
 
+  //NOTE: When testing ECB, CBC or CFB modes, print the entirety of output_bytes
+  //(completed multiples of 8), user will need that cipher text to properly decrypt
+  //the last 8 bytes of output or the plain text's last 8 will mismatch the original
+
   //test TDEA ECB Mode
+  // Note: Key bundle needs to be reversed manually for ECB Mode
   // tdea_ecb_payload_crypt(K1, K2, K3, input_bytes, output_bytes, de);
 
-  //Test TDEA MAC Generator (working, disable xor below)
+  //Test TDEA CBC Mode (working, disable xor below)
+  // Note: Key bundle is reversed in the tdea_cbc_payload_crypt function if decrypting
+  // de = 0;
+  // tdea_cbc_payload_crypt(K1, K2, K3, iv, input_bytes, output_bytes, nblocks, de);
+
+  //Test TDEA CBC MAC Generator (working, disable xor below)
   // tdea_cbc_mac_generator(K1, K2, K3, input_bytes, output_bytes, nblocks);
 
   //Test TDEA CTR Mode (untested against test vectors, disable xor below)

@@ -418,6 +418,7 @@ void tdea_ecb_payload_crypt (uint8_t * K1, uint8_t * K2, uint8_t * K3, uint8_t *
 
 //TDEA, or triple data encryption algorithm, or triple DES, in cipher block chain mode (64-bit)
 //same as usual inputs (byte wise), also, if needing DES56, just feed the same key into K1, K2, and K3
+//if running in decryption mode, this will reverse the key bundle order from (K1, K2, K3) to (K3, K2, K1) on this end
 void tdea_cbc_payload_crypt (uint8_t * K1, uint8_t * K2, uint8_t * K3, uint8_t * iv, uint8_t * in, uint8_t * out, int16_t nblocks, uint8_t de)
 {
 
@@ -429,8 +430,8 @@ void tdea_cbc_payload_crypt (uint8_t * K1, uint8_t * K2, uint8_t * K3, uint8_t *
 
   //load first round of input_register accordingly
   if (de)
-    memcpy (input_register, iv, sizeof(input_register));
-  else memcpy (input_register, in, sizeof(input_register));
+    memcpy (input_register, iv, sizeof(input_register)); //load the IV as first input_register if encrypting
+  else memcpy (input_register, in, sizeof(input_register)); //load first cipher text as input_register is decrypting
   
   //run payload for number of payload nblocks required
   for (i = 0; i < nblocks; i++)
@@ -457,7 +458,7 @@ void tdea_cbc_payload_crypt (uint8_t * K1, uint8_t * K2, uint8_t * K3, uint8_t *
       //K3
       de = (de ^ 1) & 1; //flip the de bit back
       des_cipher(K3, input_register, output_register, de);
-      memcpy (input_register, output_register, sizeof(output_register));
+      memcpy (input_register, output_register, sizeof(output_register)); //recycle output_register back into input_register
 
       //copy ciphered output_register to output 'out'
       memcpy (out+(i*8), output_register, sizeof(output_register));
@@ -467,8 +468,8 @@ void tdea_cbc_payload_crypt (uint8_t * K1, uint8_t * K2, uint8_t * K3, uint8_t *
     else
     {
       
-      //K1
-      des_cipher(K1, input_register, output_register, de);
+      //K3
+      des_cipher(K3, input_register, output_register, de);
       memcpy(input_register, output_register, sizeof(output_register)); //recycle output_register back into input_register
       memset(output_register, 0, sizeof(output_register)); //reset output register
 
@@ -478,15 +479,15 @@ void tdea_cbc_payload_crypt (uint8_t * K1, uint8_t * K2, uint8_t * K3, uint8_t *
       memcpy(input_register, output_register, sizeof(output_register)); //recycle output_register back into input_register
       memset(output_register, 0, sizeof(output_register)); //reset output register
 
-      //K3
+      //K1
       de = (de ^ 1) & 1; //flip the de bit back
-      des_cipher(K3, input_register, output_register, de);
-      memcpy (input_register, output_register, sizeof(output_register));
+      des_cipher(K1, input_register, output_register, de);
+      memcpy (input_register, output_register, sizeof(output_register)); //recycle output_register back into input_register
 
       //copy ciphered input_register to output 'out'
       memcpy (out+(i*8), output_register, sizeof(output_register));
 
-      //xor the current output by IV, or by last received CT
+      //xor the current output by IV, or by last received CT, depending on round
       if (i == 0)
       {
         for (j = 0; j < 8; j++)
