@@ -91,7 +91,7 @@ Straight, as in, a static key value that is repeated on a bit length basis and a
  Output: 000000000000000000000000
 ```
 
-Scrambler is a key bit sequence created with an LFSR (linear feedback shift register) on selected taps and lengths, using the key value as the inital LFSR Seed value, and its keystream applied directly to a plain or cipher text. This cipher is not secure against modern brute force attacks when a known plain text is known or can be moderately predicted. 
+Scrambler is a key bit sequence created with an LFSR (linear feedback shift register) on selected taps and lengths, using the key value as the inital LFSR Seed value, and its keystream applied directly to a plain or cipher text. This cipher is not secure against modern brute force attacks when a plain text is known or can be moderately predicted. 
 
 ```
 ./scrambler-crypt.o 
@@ -209,7 +209,7 @@ Note: Key Wrap Crypthings can only wrap or unwrap one key at a time.
 
 lfsr-expansion-tool can be used to expand an IV of certain pre-selected length values (32, 64) to larger sizes (64, 128) that are suitable to be used as IVs for cipher functions whose block sizes are of the same length. Users can also input a number of times, or iterations, to progressively create new IVs for subsequent encryption sessions, if needed.
 
-lfsr-recovery-tool can be used to either further iterate an IV of a selected length, or to run an LFSR of a selected legnth in a reverse direction, if recovery of a previous IV is needed for an ecnryption session.
+lfsr-recovery-tool can be used to either further iterate an IV of a selected length, or to run an LFSR of a selected legnth in a reverse direction, if recovery of a previous IV is needed for an encryption session.
 
 ```
 ./lfsr-expansion-tool.o 
