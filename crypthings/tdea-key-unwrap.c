@@ -24,7 +24,7 @@
 #include "../ciphers/des/des.h"
 #include "../utils/utils.h"
 
-int main ()
+int main (void)
 {
 
   //counters

@@ -18,7 +18,7 @@
 #include "../ciphers/scrambler/scrambler.h"
 #include "../utils/utils.h"
 
-int main ()
+int main (void)
 {
 
   uint32_t i = 0;

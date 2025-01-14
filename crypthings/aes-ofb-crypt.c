@@ -18,7 +18,7 @@
 #include "../ciphers/aes/aes.h"
 #include "../utils/utils.h"
 
-int main ()
+int main (void)
 {
 
   int16_t i = 0;

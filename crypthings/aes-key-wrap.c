@@ -24,7 +24,7 @@
 #include "../ciphers/aes/aes.h"
 #include "../utils/utils.h"
 
-int main ()
+int main (void)
 {
 
   //counters
