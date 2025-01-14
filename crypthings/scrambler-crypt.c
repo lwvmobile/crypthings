@@ -23,7 +23,7 @@ int main ()
 
   uint32_t i = 0;
   
-  uint64_t lfsr = 0; 
+  unsigned long long int lfsr = 0; 
 
   uint8_t pn[129*18*8];
   memset (pn, 0, sizeof(pn));
@@ -60,10 +60,10 @@ int main ()
   fprintf (stderr, "\n");
 
   fprintf (stderr, " Enter Key or Seed Value (hex): ");
-  scanf("%lX", &lfsr);
+  scanf("%llX", &lfsr);
 
   //print key
-  fprintf (stderr, " Key: %lX (%ld)", lfsr, lfsr);
+  fprintf (stderr, " Key: %llX (%lld)", lfsr, lfsr);
 
   fprintf (stderr, "\n");
   fprintf (stderr, " Enter Number of bits in Key/Seed (dec): ");

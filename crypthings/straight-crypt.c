@@ -74,10 +74,10 @@ int main ()
   // fprintf (stderr, "\n");
 
   //print key value in hex
-  uint64_t key_value = 0; 
-  key_value = convert_bytes_into_value(key, len);
+  unsigned long long int key_value = 0; 
+  key_value = (unsigned long long int)convert_bytes_into_value(key, len);
   if (shift) key_value >>= 4;
-  fprintf (stderr, " Key: %lX \n", key_value);
+  fprintf (stderr, " Key: %llX \n", key_value);
 
   fprintf (stderr, " Enter Number of Significant Bits in Key: ");
   scanf("%hi", &kbitlen);
