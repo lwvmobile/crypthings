@@ -10,6 +10,8 @@ Run with `./aes-ofb-crypt.o` in the terminal, for example.
 Run `sh cross-compile.sh` to cross compile on Linux platform to Windows as .exe files.
 Windows users, precompiled exe files will be available under releases.
 
+`sh clang-compile.sh` is also available.
+
 See the [README](https://github.com/lwvmobile/crypthings/blob/main/crypthings/README.md "README") file in the crypthings folder for more information on Crypthings programs.
 
 ## Information and Resources, Test Vectors, Etc.
