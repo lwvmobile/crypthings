@@ -122,11 +122,11 @@ int main (void)
   memcpy (C[0], iv, sizeof(iv));
 
   //copy input_bytes to cipher code words
-  for (i = 0; i < 10; i++) 
+  for (i = 0; i < 9; i++)
     memcpy(C[i+1], input_bytes+(i*4), sizeof(C[0]));
 
   //debug loaded code words
-  // for (j = 0; j < (jstop-1); j++)
+  // for (j = 0; j < istop; j++)
   // {
   //   fprintf (stderr, "\n   C[%d]: ", j);
   //   for (i = 0; i < 4; i++)

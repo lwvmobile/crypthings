@@ -142,7 +142,7 @@ These functions should only be used to recover previously stored or pre-existing
 
 ## Key Wrap Crypthings
 
-aes-key-wrap, aes-key-unwrap, tdea-key-wrap, and tdea-key-unwrap (KW and TKW) are key wrapping programs that will take encryption keys of various length values (values determined by common key length values, or otherwise, one half the size of the cipher block), and wrap or unwrap them by encrypting or decrypting them multiple times with a pre-shared private key and incorporating an integrety check value (0xA6A6A6...) and iterator permutations on input to produce a cipher text that can be transmitted and sent to another location or a plain text that can be recovered in a cryptographically secure way.
+aes-key-wrap, aes-key-unwrap, tdea-key-wrap, and tdea-key-unwrap (KW and TKW) are key wrapping programs that will take encryption keys of various length values (values determined by common key length values, or otherwise, multiples of one half the size of the cipher block, up to the key length of the cipher), and wrap or unwrap them by encrypting or decrypting them multiple times with a pre-shared private key and incorporating an integrety check value (0xA6A6A6...) and iterator permutations on input to produce a cipher text that can be transmitted and sent to another location or a plain text that can be recovered in a cryptographically secure way.
 
 For example, a communication system may wish to re-key their equipment by sending a message including a key wrapped key (inner layer) with further instructions to the equipment. That message, in its entirety, may in turn, be encrypted as well (outer layer) with a second key for additional security.
 
