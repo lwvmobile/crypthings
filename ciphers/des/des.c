@@ -608,7 +608,7 @@ void tdea_cfb_payload_crypt (uint8_t * K1, uint8_t * K2, uint8_t * K3, uint8_t *
 
 }
 
-//TDEA, or triple data encryption algorithm, or triple DES, in IV counter mode (untested)
+//TDEA, or triple data encryption algorithm, or triple DES, in IV counter mode (tested, working)
 void tdea_ctr_payload_crypt (uint8_t * K1, uint8_t * K2, uint8_t * K3, uint8_t * iv, uint8_t * input, uint8_t * output, int16_t nblocks)
 {
 
@@ -648,34 +648,12 @@ void tdea_ctr_payload_crypt (uint8_t * K1, uint8_t * K2, uint8_t * K3, uint8_t *
     memset(output_register, 0, sizeof(output_register)); //reset output register
 
     //increment the IV, and handle roll over (uint8_t will rollover to 0 after 0xFF)
-    iv[7]++;
-    if (iv[7] == 0)
+    for (j = 7; j >= 0; j--)
     {
-      iv[6]++;
-      if (iv[6] == 0)
-      {
-        iv[5]++;
-        if (iv[5] == 0)
-        {
-          iv[4]++;
-          if (iv[4] == 0)
-          {
-            iv[3]++;
-            if (iv[3] == 0)
-            {
-              iv[2]++;
-              if (iv[2] == 0)
-              {
-                iv[1]++;
-                if (iv[1] == 0)
-                {
-                  iv[0]++;
-                }
-              }
-            }
-          }
-        }
-      }
+      iv[j]++;
+      if (iv[j] == 0)
+        continue;
+      else break;
     }
 
     //debug IV iteration

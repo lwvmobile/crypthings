@@ -151,7 +151,7 @@ int main (void)
   //Test TDEA CBC MAC Generator (working, disable xor below)
   // tdea_cbc_mac_generator(K1, K2, K3, input_bytes, output_bytes, nblocks);
 
-  //Test TDEA CTR Mode (untested against test vectors, disable xor below)
+  //Test TDEA CTR Mode (tested and working against test vectors,  disable xor below)
   // tdea_ctr_payload_crypt(K1, K2, K3, iv, input_bytes, output_bytes, nblocks);
 
   //xor keystream vs input to get output
