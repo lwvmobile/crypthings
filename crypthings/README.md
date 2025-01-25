@@ -2,7 +2,7 @@
 
 ## Secure Cipher Crypthings
 
-aes-ofb-crypt, des56-ca-crypt, des56-ofb-crypt, tdea-tofb-crypt are cryptographically secure (or historically secure...ish in the case of single key DES56) message cipher programs that will allow a user to input hex octets to be ciphered, a key, an IV (initialization vector), keystream offset value, etc as applicable, in order to encrypt or decrypt the input hex octets to produce either cipher text, or plain text. The cipher operation performed is the same as the name of the program.
+aes-ofb-crypt, aes-ctr-crypt, des56-ca-crypt, des56-ofb-crypt, tdea-tofb-crypt are cryptographically secure (or historically secure...ish in the case of single key DES56) message cipher programs that will allow a user to input hex octets to be ciphered, a key, an IV (initialization vector), keystream offset value, etc as applicable, in order to encrypt or decrypt the input hex octets to produce either cipher text, or plain text. The cipher operation performed is the same as the name of the program.
 
 For Example, Using aes-ofb-crypt and the test vectors found on example F.4.5 on page 54 of [NIST 800-38A](https://nvlpubs.nist.gov/nistpubs/Legacy/SP/nistspecialpublication800-38a.pdf "NIST  800-38A") and using a keystream offset of 16 to account for the first round discard (IV round), we can reproduce the example cipher text values, and vice versa to recover the plain text.
 

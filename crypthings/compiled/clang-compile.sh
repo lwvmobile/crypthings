@@ -2,6 +2,7 @@
 #
 clang ../rc4-crypt.c ../../ciphers/rc4/rc4.c ../../utils/utils.c -o rc4-crypt.o -Wall -Wextra -Wpedantic -Werror
 clang ../aes-ofb-crypt.c ../../ciphers/aes/aes.c ../../utils/utils.c -o aes-ofb-crypt.o -Wall -Wextra -Wpedantic -Werror
+clang ../aes-ctr-crypt.c ../../ciphers/aes/aes.c ../../utils/utils.c -o aes-ctr-crypt.o -Wall -Wextra -Wpedantic -Werror
 clang ../des56-ofb-crypt.c ../../ciphers/des/des.c ../../utils/utils.c -o des56-ofb-crypt.o -Wall -Wextra -Wpedantic -Werror
 clang ../des56-ca-crypt.c ../../ciphers/des/des.c ../../utils/utils.c -o des56-ca-crypt.o -Wall -Wextra -Wpedantic -Werror
 clang ../tdea-tofb-crypt.c ../../ciphers/des/des.c ../../utils/utils.c -o tdea-tofb-crypt.o -Wall -Wextra -Wpedantic -Werror
