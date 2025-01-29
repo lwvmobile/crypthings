@@ -128,9 +128,13 @@ int main (void)
   if (offset % 8) nblocks++;
 
   //print input
-  fprintf (stderr, "\n  Input: ");
+  fprintf (stderr, "\n  In: ");
   for (i = 0; i < len; i++)
+  {
+    if ((i != 0) && ((i%8) == 0))
+      fprintf (stderr, " ");
     fprintf (stderr, "%02X", input_bytes[i]);
+  }
 
   //byte-wise output of TDEA-TOFB Keystream
   tdea_tofb_keystream_output (K1, K2, K3, iv, keystream_bytes, de, nblocks);
@@ -158,8 +162,17 @@ int main (void)
   for (i = 0; i < len; i++)
     output_bytes[i] = input_bytes[i] ^ keystream_bytes[i+offset];
 
+  //print keystream
+  fprintf (stderr, "\n  KS: ");
+  for (i = 0; i < len; i++)
+  {
+    if ((i != 0) && ((i%8) == 0))
+      fprintf (stderr, " ");
+    fprintf (stderr, "%02X", keystream_bytes[i+offset]);
+  }
+
   //print output
-  fprintf (stderr, "\n\n Output: ");
+  fprintf (stderr, "\n Out: ");
   for (i = 0; i < len; i++)
   {
     if ((i != 0) && ((i%8) == 0))

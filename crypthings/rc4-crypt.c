@@ -128,9 +128,13 @@ int main (void)
   nbytes = len;
 
   //print input
-  fprintf (stderr, "\n  Input: ");
+  fprintf (stderr, "\n  In: ");
   for (i = 0; i < len; i++)
+  {
+    if ((i != 0) && ((i%8) == 0))
+      fprintf (stderr, " ");
     fprintf (stderr, "%02X", input_bytes[i]);
+  }
 
   //byte-wise output of RC4 Keystream
   rc4_keystream_output(drop, kivlen, nbytes, kiv, keystream_bytes);
@@ -139,10 +143,23 @@ int main (void)
   for (i = 0; i < nbytes; i++)
     output_bytes[i] = input_bytes[i] ^ keystream_bytes[i];
 
+  //print keystream
+  fprintf (stderr, "\n  KS: ");
+  for (i = 0; i < len; i++)
+  {
+    if ((i != 0) && ((i%8) == 0))
+      fprintf (stderr, " ");
+    fprintf (stderr, "%02X", keystream_bytes[i]);
+  }
+
   //print output
-  fprintf (stderr, "\n\n Output: ");
-  for (i = 0; i < nbytes; i++)
+  fprintf (stderr, "\n Out: ");
+  for (i = 0; i < len; i++)
+  {
+    if ((i != 0) && ((i%8) == 0))
+      fprintf (stderr, " ");
     fprintf (stderr, "%02X", output_bytes[i]);
+  }
 
   //print output (as string)
   // fprintf (stderr, "\n Output: %s", output_bytes+offset);

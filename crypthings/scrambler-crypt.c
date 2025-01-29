@@ -86,7 +86,7 @@ int main (void)
   bitlen = len*8;
 
   //print input
-  fprintf (stderr, "\n  Input: ");
+  fprintf (stderr, "\n  In: ");
   for (i = 0; i < bytelen; i++)
   {
     if (bits49)
@@ -111,7 +111,7 @@ int main (void)
   //debug print the pn sequence for comparison
   pack_bit_array_into_byte_array(pn+offset, pn_bytes, bytelen);
 
-  fprintf (stderr, "\n     KS: ");
+  fprintf (stderr, "\n  KS: ");
   for (i = 0; i < bytelen; i++)
   {
     if (bits49)
@@ -139,7 +139,7 @@ int main (void)
   pack_bit_array_into_byte_array(output_bits, output_bytes, bytelen);
 
   //print output
-  fprintf (stderr, "\n Output: ");
+  fprintf (stderr, "\n Out: ");
   for (i = 0; i < bytelen; i++)
   {
     if(bits49)

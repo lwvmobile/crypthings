@@ -106,7 +106,7 @@ int main (void)
   if (kbitlen%8) kbytelen++;
 
   //print input
-  fprintf (stderr, "\n  Input: ");
+  fprintf (stderr, "\n  In: ");
   for (i = 0; i < bytelen; i++)
   {
     if (mask)
@@ -132,7 +132,7 @@ int main (void)
   //debug print the ks_bits for comparison
   pack_bit_array_into_byte_array(ks_bits+offset, ks_bytes, bytelen);
 
-  fprintf (stderr, "\n     KS: ");
+  fprintf (stderr, "\n  KS: ");
   for (i = 0; i < bytelen; i++)
   {
     if (mask)
@@ -174,7 +174,7 @@ int main (void)
   pack_bit_array_into_byte_array(output_bits, output_bytes, bytelen);
 
   //print output
-  fprintf (stderr, "\n Output: ");
+  fprintf (stderr, "\n Out: ");
   for (i = 0; i < bytelen; i++)
   {
     if(mask)

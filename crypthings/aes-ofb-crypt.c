@@ -163,9 +163,13 @@ int main (void)
   if (offset % 16) nblocks++;
 
   //print input
-  fprintf (stderr, "\n  Input: ");
+  fprintf (stderr, "\n  In: ");
   for (i = 0; i < len; i++)
+  {
+    if ((i != 0) && ((i%16) == 0))
+      fprintf (stderr, " ");
     fprintf (stderr, "%02X", input_bytes[i]);
+  }
 
   //byte-wise output of AES OFB Keystream
   aes_ofb_keystream_output(iv, key, keystream_bytes, type, nblocks);
@@ -174,11 +178,20 @@ int main (void)
   for (i = 0; i < len; i++)
     output_bytes[i] = input_bytes[i] ^ keystream_bytes[i+offset];
 
-  //print output
-  fprintf (stderr, "\n\n Output: ");
+  //print keystream
+  fprintf (stderr, "\n  KS: ");
   for (i = 0; i < len; i++)
   {
-    if ((i != 0) && ((i%8) == 0))
+    if ((i != 0) && ((i%16) == 0))
+      fprintf (stderr, " ");
+    fprintf (stderr, "%02X", keystream_bytes[i+offset]);
+  }
+
+  //print output
+  fprintf (stderr, "\n Out: ");
+  for (i = 0; i < len; i++)
+  {
+    if ((i != 0) && ((i%16) == 0))
       fprintf (stderr, " ");
     fprintf (stderr, "%02X", output_bytes[i]);
   }
@@ -187,7 +200,7 @@ int main (void)
   // fprintf (stderr, "\n Output: %s", output_bytes);
 
   //ending line break
-  fprintf (stderr, "\n ");
+  fprintf (stderr, "\n\n ");
 
   //set a pause for user interaction before closing
   fprintf (stderr, "Enter any value to Exit: ");
