@@ -15,12 +15,22 @@ uint16_t parse_raw_user_string (char * input, uint8_t * output)
 {
   //since we want this as octets, get strlen value, then divide by two
   uint16_t len = strlen((const char*)input);
+
+  uint8_t shift = 0;
   
   //if zero is returned, just do two
-  if (len == 0) len = 2;
+  // if (len == 0) len = 2;
 
-  //if odd number, then user didn't pass complete octets, but just add one to len value to make it even
-  if (len&1) len++;
+  //if zero, return as 0 len string
+  if (len == 0) return 0;
+
+  //if odd number, then user didn't pass complete octets,
+  //add one to len value and set the shift flag to left shift
+  if (len&1)
+  {
+    shift = 1;
+    len++;
+  } 
 
   //divide by two to get octet len
   len /= 2;
@@ -38,6 +48,9 @@ uint16_t parse_raw_user_string (char * input, uint8_t * output)
 
     k += 2;
   }
+
+  //if we had an odd input value, then left shift the last octet 4 to make it flush
+  if (shift) output[len-1] <<= 4;
 
   return len;
 }

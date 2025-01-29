@@ -65,7 +65,7 @@ int main (void)
   len = strlen((const char*)input_string);
   if (len&1) shift = 1; //set shift flag if odd number on len to indicate the last octet needs shifting by 4
   len = parse_raw_user_string(input_string, key);
-  if (shift) key[len-1] <<= 4;
+  // if (shift) key[len-1] <<= 4; //handled by parse_raw_user_string now
 
   //debug print key as it is loaded in the byte array
   // fprintf (stderr, " Key: ");
