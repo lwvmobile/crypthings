@@ -26,8 +26,8 @@ int main (void)
   uint8_t key[5];
   memset (key, 0, 5*sizeof(uint8_t));
 
-  uint8_t iv[8];
-  memset (iv, 0, 8*sizeof(uint8_t));
+  uint8_t iv[95];
+  memset (iv, 0, 95*sizeof(uint8_t));
 
   uint8_t kiv[100];
   memset (kiv, 0, 100*sizeof(uint8_t));
@@ -101,7 +101,7 @@ int main (void)
   len = parse_raw_user_string(input_string, iv);
 
   //print key
-  fprintf (stderr, " IV: ");
+  fprintf (stderr, "  IV: ");
   for (i = 0; i < len; i++)
     fprintf (stderr, "%02X", iv[i]);
 
