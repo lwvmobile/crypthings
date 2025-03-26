@@ -109,7 +109,7 @@ int main (void)
   for (i = 0; i < 5; i++)
     kiv[i] = key[i];
 
-  for (i = 0; i < kivlen; i++)
+  for (i = 0; i < (kivlen-5); i++)
     kiv[i+5] = iv[i];
 
   //print kiv
