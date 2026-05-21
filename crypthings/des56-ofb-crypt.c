@@ -64,7 +64,7 @@ int main (void)
     fprintf (stderr, "%02X", key[i]);
 
   memset (input_string, 0, 2048*sizeof(char));
-  fprintf (stderr, "\n Enter IV (8 octets): ");
+  fprintf (stderr, "\n Enter IV (4 or 8 octets): ");
   scanf("%s", input_string); //no white space allowed
   input_string[2999] = '\0'; //terminate string
   len = parse_raw_user_string(input_string, iv);
@@ -73,6 +73,9 @@ int main (void)
   fprintf (stderr, " IV: ");
   for (i = 0; i < len; i++)
     fprintf (stderr, "%02X", iv[i]);
+
+  if (len == 4)
+    lfsr_32_to_64(iv);
 
   fprintf (stderr, "\n Enter Keystream Application Offset (#Bytes, 0, 8, or 19 are typical): ");
   scanf("%hi", &offset);
